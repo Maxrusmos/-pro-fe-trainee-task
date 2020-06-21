@@ -1,0 +1,38 @@
+.title{
+	font-family: "arial";
+	text-align: center;
+	font-weight: lighter;
+}
+
+.search_line{
+	width: 40%;
+	margin: 0 auto;
+}
+
+.search_input{
+	padding-left: 5px;
+	width: 85%;
+	height: 34px;
+	font-size: 22px;
+	display: inline-block;
+	margin-right: 1.5%;
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+.for_search_button{
+	position: relative;
+    top: 50%;
+	display: inline-block;
+	height: 34px;
+	transform: translate(0, -3%);
+	border: 1px solid gray;
+	border-radius: 7%;
+}
+
+.search_button{
+	height: 34px;
+	width: 34px;
+	background-color: rgba(0, 0, 0, 0);
+	border: none;
+}

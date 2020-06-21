@@ -7,11 +7,14 @@ class View {
 
     this.searchLine = this.createElement("div", "search_line");
     this.searchInput = this.createElement("input", "search_input");
+    this.divForSearchButton = this.createElement("div", "for_search_button");
     this.searchButton = this.createElement("button", "search_button");
-    this.searchImg = this.createElement("img");
-    this.searchButton.append(this.searchImg);
+    this.searchButton.innerHTML = "&#128269";
+
+    this.divForSearchButton.append(this.searchButton);
+
     this.searchLine.append(this.searchInput);
-    this.searchLine.append(this.searchButton);
+    this.searchLine.append(this.divForSearchButton);
 
     this.repoesWrap = this.createElement("div", "repoes-wrapper");
     this.repoesList = this.createElement("ul", "repoes-list");
@@ -27,9 +30,6 @@ class View {
 
   createElement(elementTag, elementClass) {
     const element = document.createElement(elementTag);
-    if (elementTag == "img") {
-      element.src = "https://kingstones.ru/nkar/poisk.png";
-    }
     if (elementClass) {
       element.classList.add(elementClass);
     } 
