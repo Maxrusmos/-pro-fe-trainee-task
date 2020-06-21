@@ -5,7 +5,7 @@
 }
 
 .search_line{
-	width: 40%;
+	width: 60%;
 	margin: 0 auto;
 }
 
@@ -15,19 +15,19 @@
 	height: 34px;
 	font-size: 22px;
 	display: inline-block;
-	margin-right: 1.5%;
 	border: 1px solid gray;
-	border-radius: 5px;
+	border-right: none;
+	border-radius: 5px 0 0 5px;
 }
 
 .for_search_button{
 	position: relative;
     top: 50%;
 	display: inline-block;
-	height: 34px;
-	transform: translate(0, -3%);
+	height: 36px;
+	transform: translate(0, -5%);
 	border: 1px solid gray;
-	border-radius: 7%;
+	border-radius: 0 5px 5px 0;
 }
 
 .search_button{
@@ -35,4 +35,14 @@
 	width: 34px;
 	background-color: rgba(0, 0, 0, 0);
 	border: none;
+}
+
+.repoes-wrapper{
+	margin-top: 1%;
+	position: absolute;
+	left: 50%;
+	width: 54%;
+	height: 40vw;
+	overflow: auto;
+	transform: translate(-57%, 0);
 }

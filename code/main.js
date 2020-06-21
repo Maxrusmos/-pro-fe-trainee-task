@@ -12,7 +12,6 @@ class View {
     this.searchButton.innerHTML = "&#128269";
 
     this.divForSearchButton.append(this.searchButton);
-
     this.searchLine.append(this.searchInput);
     this.searchLine.append(this.divForSearchButton);
 
@@ -38,7 +37,7 @@ class View {
 
   createRepo(repoData) {
     const repoElement = this.createElement("li", "repo");
-    repoElement.innerHTML = `<h2 class="repo_name">Name of the repository: ${repoData.name}</h2>
+    repoElement.innerHTML = `<h2 class="repo_name">Name: ${repoData.name}</h2>
                              <span>Number of stars: ${repoData.stargazers_count} </span><br>
                              <span>Date of the last commit: ${repoData.updated_at}</span><br>
                              <span>link: ${repoData.git_url}</span>`
@@ -46,6 +45,8 @@ class View {
   }
 }
 
+//сколько элементов отображать на одной странице
+const REPOES_PER_PAGE = 10;
 
 class Search {
   constructor(view) {
@@ -54,7 +55,7 @@ class Search {
   }
 
   async searchRepoes() {
-    return await fetch(`https://api.github.com/search/repositories?q=${this.view.searchInput.value}&per_page=10`).
+    return await fetch(`https://api.github.com/search/repositories?q=${this.view.searchInput.value}&per_page=${REPOES_PER_PAGE}`).
     then((res) => {
         if (res.ok) {
           res.json().then(res => {
