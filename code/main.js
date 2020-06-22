@@ -70,9 +70,8 @@ class View {
   }
 }
 
-//сколько элементов отображать на одной странице
-const REPOES_PER_PAGE = 10;
 
+const REPOES_PER_PAGE = 10;
 class Search {
   constructor(view) {
     this.view = view;
@@ -108,7 +107,9 @@ class Search {
     then((res) => {
         if (res.ok) {
           res.json().then(res => {
-            res.items.forEach(repository => this.view.createRepo(repository))
+            res.items.forEach(repository => {
+              this.view.createRepo(repository)
+            })
           })
         } else {
           //ошибка
@@ -164,5 +165,54 @@ class Search {
   }
 }
 
-
 new Search(new View());
+
+
+
+class CardView {
+  constructor() {
+    this.appCard = document.getElementById("appCard");
+    this.mainDiv = this.createElement("div", "main_div");
+    this.appCard.append(this.mainDiv);
+  }
+
+  createElement(elementTag, elementClass) {
+    const element = document.createElement(elementTag);
+    if (elementClass) {
+      element.classList.add(elementClass);
+    } 
+    return element;
+  }
+
+  createRepoCard(repoCardData) {
+    const infoList = this.createElement("ul", "info_list");
+    infoList.innerHTML = `<li><h1>${repoCardData.name}</h1></li>
+                          <li><span>Number of stars: ${repoCardData.stargazers_count}</span></li>
+                          <li><span>Date of the last commit: ${repoCardData.updated_at}</span></li>
+                          <li><img src="${repoCardData.avatar_url}"></li>
+                          <li>List of languages: ${repoCardData.languages_url}</li>
+                          <li>Brief description: ${repoCardData.description}</li>
+                          <li>Contributors: ${repoCardData.contributors_url}</li>`
+    this.mainDiv.append(this.infoList);
+  }
+}
+
+class FillCard {
+  constructor(cardView) {
+    this.cardView = cardView;
+
+  }
+
+ async cardDataFill() {
+  return await fetch(`https://api.github.com/search/repositories?q=${this.view.searchInput.value}&per_page=${REPOES_PER_PAGE}&page=${this.currentPage}`).
+  then((res) => {
+      if (res.ok) {
+        res.json().then(res => {
+          res.items.forEach(repository => this.view.createRepoCard(repository))
+        })
+      } else {
+        //ошибка
+      }
+    })
+  }
+}
