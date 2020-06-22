@@ -112,7 +112,7 @@ class Search {
             })
           })
         } else {
-          //ошибка
+          console.log('Error 2' + response.status);
         }
     })
   }
