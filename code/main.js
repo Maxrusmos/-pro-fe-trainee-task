@@ -22,11 +22,27 @@ class View {
     this.main = this.createElement("div", "main");
     this.main.append(this.repoesWrap);
 
+    //pagenator доделать, переделать
+    this.pages = this.createElement("div", "pages_div");
+    for (let i = 1; i <= 5; i++) {
+      this.linkPage = this.createElement("span", "link_page");
+      this.linkPage.innerHTML = i;
+      this.pages.append(this.linkPage);
+    }
+
+    this.main.append(this.pages);
+
     this.app.append(this.title);
     this.app.append(this.searchLine);
     this.app.append(this.main);
   }
 
+/**
+ * [createElement description]
+ * @param  {[type]} elementTag   [description]
+ * @param  {[type]} elementClass [description]
+ * @return {[type]}              [description]
+ */
   createElement(elementTag, elementClass) {
     const element = document.createElement(elementTag);
     if (elementClass) {
@@ -35,6 +51,11 @@ class View {
     return element;
   }
 
+/**
+ * [createRepo description]
+ * @param  {[type]} repoData [description]
+ * @return {[type]}          [description]
+ */
   createRepo(repoData) {
     const repoElement = this.createElement("li", "repo");
     repoElement.innerHTML = `<h2 class="repo_name">Name: ${repoData.name}</h2>
@@ -42,6 +63,10 @@ class View {
                              <span>Date of the last commit: ${repoData.updated_at}</span><br>
                              <span>link: ${repoData.git_url}</span>`
     this.repoesList.append(repoElement);
+  }
+
+  clearRepoes() {
+    this.repoesList.innerHTML = '';
   }
 }
 
@@ -52,10 +77,34 @@ class Search {
   constructor(view) {
     this.view = view;
     this.view.searchButton.addEventListener("click", this.searchRepoes.bind(this));
+    for (let i = 0; i < document.getElementsByClassName("link_page").length; i++) {
+      document.getElementsByClassName("link_page")[i].addEventListener("click", this.loadMorePages.bind(this, i));
+    }
   }
 
+/**
+ * [currentPageNumber description]
+ * @return {[type]} [description]
+ */
+  get currentPageNumber() {
+    return this.currentPage;
+  }
+
+/**
+ * [setCurrentPageValue description]
+ * @param {[type]} pageNumber [description]
+ */
+  setCurrentPageValue(pageNumber) {
+    this.currentPage = pageNumber;
+  }
+
+/**
+ * [searchRepoes description]
+ * @return {[type]} [description]
+ */
   async searchRepoes() {
-    return await fetch(`https://api.github.com/search/repositories?q=${this.view.searchInput.value}&per_page=${REPOES_PER_PAGE}`).
+    this.view.clearRepoes();
+    return await fetch(`https://api.github.com/search/repositories?q=${this.view.searchInput.value}&per_page=${REPOES_PER_PAGE}&page=${this.currentPage}`).
     then((res) => {
         if (res.ok) {
           res.json().then(res => {
@@ -65,6 +114,53 @@ class Search {
           //ошибка
         }
     })
+  }
+
+/**
+ * [loadMorePages description]
+ * @param  {[type]} i [description]
+ * @return {[type]}   [description]
+ */
+  loadMorePages(i){
+    this.view.clearRepoes();
+    this.setCurrentPageValue(i + 1);
+    this.loadRepoes(this.view.searchInput.value, this.currentPageNumber).then(response => this.updateRepoes(response, true))
+  }
+
+/**
+ * [loadRepoes description]
+ * @param  {[type]} searchValue [description]
+ * @param  {[type]} page        [description]
+ * @return {[type]}             [description]
+ */
+  async loadRepoes(searchValue, page) {
+    return await fetch(`https://api.github.com/search/repositories?q=${this.view.searchInput.value}&per_page=${REPOES_PER_PAGE}&page=${page}`);
+  }
+
+
+/**
+ * [updateRepoes description]
+ * @param  {[type]}  response [description]
+ * @param  {Boolean} isUpdate [description]
+ * @return {[type]}           [description]
+ */
+  updateRepoes(response, isUpdate = false) {
+    let repoes;
+    if (response.ok) {
+      if (!isUpdate) {
+        this.view.clearRepoes();
+      }
+      response.json().then((res) => {
+        if (res.items) {
+          repoes = res.items;
+          repoes.forEach(repo => this.view.createRepo(repo));
+        } else {
+          this.view.clearRepoes();
+        }
+      });
+    } else {
+      console.log('Error 1' + response.status);
+    }
   }
 }
 

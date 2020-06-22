@@ -1,6 +1,7 @@
 .title{
 	font-family: "arial";
 	text-align: center;
+	margin-right: 3.5%;
 	font-weight: lighter;
 }
 
@@ -45,4 +46,15 @@
 	height: 40vw;
 	overflow: auto;
 	transform: translate(-57%, 0);
+}
+
+.pages_div{
+	position: absolute;
+	left: 50%;
+	transform: translate(-90%, 0);
+	bottom: 2%;
+}
+
+.link_page{
+	margin-right: 10px;
 }
